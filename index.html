@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garaje Code Pills | Aframe</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/aframevr/aframe/master/dist/aframe-particle-system-component.min.js"></script>
+    <script src="js/app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, a-text {
+            font-family: 'Roboto', sans-serif;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            font-weight: 700;
+            color: #333;
+        }
+        .modal-content p {
+            font-size: 16px;
+            color: #555;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .celebration-animation {
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <a-scene>
+        <a-assets>
+            <img src="textures/sky.jpeg" id="sky">
+            <img src="textures/meteor.jpeg" id="meteor">
+            <audio id="explosion" src="sounds/explosion.mp3"></audio>
+        </a-assets>
+
+        <a-sky src="#sky"></a-sky>
+        <!-- Orbits -->
+        <a-entity class="orbit" position="0 3 0" rotation="0 0 0" animation="property: rotation; to: 0 360 360; loop: true; dur: 40000; easing: linear"></a-entity>
+        <a-entity class="orbit" position="0 0 0" rotation="0 0 -45" animation="property: rotation; to: 0 -360 0; loop: true; dur: 30000; easing: linear"></a-entity>
+        <a-entity class="orbit" position="0 -3 0" rotation="0 0 -90" animation="property: rotation; to: 0 360 360; loop: true; dur: 20000; easing: linear"></a-entity>
+        <a-entity class="orbit" position="0 0 0" rotation="0 0 -120" animation="property: rotation; to: 360 -360 0; loop: true; dur: 50000; easing: linear"></a-entity>
+        <!-- Camera and Cursor -->
+        <a-entity camera look-controls>
+            <a-text id="score" value="0 meteoros cazados" color="white" position="0 -0.1 -1" width="1" align="center"></a-text>
+            <a-text id="level" value="Nivel: 1" color="white" position="0 0.1 -1" width="1" align="center"></a-text>
+            <a-text id="timer" value="Tiempo: 20" color="white" position="0 0.3 -1" width="1" align="center"></a-text>
+            <a-entity cursor="fuse: true; fuseTimeout: 100" position="0 0 -1" raycaster="objects: .meteor" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="shader: flat"></a-entity>
+        </a-entity>
+    </a-scene>
+    <!-- Modales -->
+    <div id="modal-win" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-win">&times;</span>
+            <h2>¡Ganaste!</h2>
+            <p>¡Felicidades! Has completado el nivel.</p>
+            <button class="btn" id="next-level">Siguiente Nivel</button>
+        </div>
+    </div>
+    <div id="modal-lose" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-lose">&times;</span>
+            <h2>¡Perdiste!</h2>
+            <p>No has alcanzado el objetivo. Intenta de nuevo.</p>
+            <button class="btn" id="restart">Reintentar</button>
+        </div>
+    </div>
+    <div id="modal-final" class="modal">
+        <div class="modal-content celebration-animation">
+            <span class="close" id="close-final">&times;</span>
+            <h2>¡Felicidades!</h2>
+            <p>Has completado todos los niveles. ¡Eres un campeón!</p>
+            <button class="btn" id="play-again">Jugar de nuevo</button>
+        </div>
+    </div>
+</body>
+
+</html>
